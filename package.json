@@ -9,7 +9,7 @@
     "db:push": "drizzle-kit push",
     "db:pull": "drizzle-kit pull",
     "db:generate": "drizzle-kit generate",
-      "db:studio": "drizzle-kit studio"
+    "db:studio": "drizzle-kit studio"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +26,7 @@
     "dotenv": "^17.4.2",
     "drizzle-orm": "^0.45.2",
     "express": "~4.22.1",
-    "pg": "^8.20.0"
+    "pg": "^8.20.0",
+    "zod": "^4.3.6"
   }
 }
