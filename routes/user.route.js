@@ -1,9 +1,9 @@
 import express from 'express';
 import db from '../db/index.js';
 import { usersTable } from '../models/index.js';
-import { randomBytes } from 'node:crypto';
-import { eq } from 'drizzle-orm';
 import { registerRequestSchema } from '../validation/request.validation.js';
+import { hashpasswordwithsalt } from '../utils/hash.js';
+import { getuserbyemail } from '../services/user.service.js';
 
 const router = express.Router();
 
@@ -19,20 +19,11 @@ router.post('/register', async (req, res) => {
   // ✅ Extract validated data
   const { name, password, age, email } = validationResult.data;
 
+  // ✅ Hash password with salt
+  const { password: hashedPassword, salt } = hashpasswordwithsalt(password);
+
   // 🔍 Check if user already exists
-  const existingUser = await db
-    .select()
-    .from(usersTable)
-    .where(eq(usersTable.email, email));
-
-  if (existingUser.length > 0) {
-    return res.status(400).json({ error: 'User already exists' });
-  }
-
-  // 🔐 Generate salt
-  const salt = randomBytes(16).toString('hex');
-
-  const hashedPassword = password + salt;
+    const existingUser = await getuserbyemail(email);
 
   // 💾 Insert user
   const user = await db
